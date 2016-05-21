@@ -45,6 +45,11 @@ def time(bot, update):
 def tdt(bot, update):
     bot.sendPhoto(update.message.chat_id, photo=ComTdT.get_tdt_img_url())
 
+
+def fu(bot, update):
+    bot.sendPhoto(update.message.chat_id, photo=open('./Images/media/Fuck_you.jpg', 'rb'))
+
+
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
@@ -67,6 +72,7 @@ def main():
     # custom commands
     dp.add_handler(CommandHandler("time", time))
     dp.add_handler(CommandHandler("tdt", tdt))
+    dp.add_handler(CommandHandler("fu", fu))
 
     # log all errors
     dp.add_error_handler(error)
