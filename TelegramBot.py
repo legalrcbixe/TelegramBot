@@ -54,6 +54,10 @@ def boobs(bot, update):
     bot.sendPhoto(update.message.chat_id, photo=ComOPorn.return_oboobs_url())
 
 
+def butts(bot, update):
+    bot.sendPhoto(update.message.chat_id, photo=ComOPorn.return_obutts_url())
+
+
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
@@ -78,6 +82,7 @@ def main():
     dp.add_handler(CommandHandler("tdt", tdt))
     dp.add_handler(CommandHandler("fu", fu))
     dp.add_handler(CommandHandler("boobs", boobs))
+    dp.add_handler(CommandHandler("butts", butts))
 
     # log all errors
     dp.add_error_handler(error)
