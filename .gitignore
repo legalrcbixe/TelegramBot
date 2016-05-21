@@ -1,2 +1,4 @@
 # Token, API, Config files
 *.conf
+# Log files
+*.log
