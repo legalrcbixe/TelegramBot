@@ -13,6 +13,14 @@ Press Ctrl-C on the command line or send a signal to the process to stop the
 bot.
 """
 
+commands_clean = {'help' : 'Gibt eine Liste der Befehle aus',
+                    'time' : 'Gibt die aktuelle Zeit in Berlin, Tokio, Los Angeles und Shanghai aus',
+                    'fu' : 'Postet das "Fuck You" Bild'}
+
+commands_dirty = {'tdt' : 'Posted das aktuelle Titten des Tages Bild',
+                    'boobs' : 'Postet ein zufälliges Bild von oboobs.ru',
+                    'butts' : 'Postet ein zufälliges Bild von obutts.ru'}
+
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import ComTime, ComTdT, ComOPorn
 import logging, os
@@ -34,8 +42,22 @@ def start(bot, update):
     bot.sendMessage(update.message.chat_id, text='Hi!')
 
 
-def help(bot, update):
-    bot.sendMessage(update.message.chat_id, text='Help!')
+def help(bot, update, args):
+    if len(args) > 1 or len(args) < 0:
+        bot.sendMessage(update.message.chat_id, text="Bitte nur ein Argument angeben")
+    if args:
+        if {**commands_clean, **commands_dirty}.get(args[0]) is not None:
+            bot.sendMessage(update.message.chat_id, text={**commands_clean, **commands_dirty}[args[0]])
+        else:
+            bot.sendMessage(update.message.chat_id, text="Keine C.A.B.A.L. Funktion")
+    else:
+        command_list = ""
+        if update.message.chat_id == -5707720:
+            for key in commands_dirty:
+                command_list += key + '\n'
+        for key in commands_clean:
+            command_list += key + '\n'
+        bot.sendMessage(update.message.chat_id, text=command_list)
 
 
 def time(bot, update):
@@ -75,7 +97,7 @@ def main():
 
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("help", help, pass_args=True))
 
     # custom commands
     dp.add_handler(CommandHandler("time", time))

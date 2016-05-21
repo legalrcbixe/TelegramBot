@@ -31,5 +31,4 @@ def return_obutts_url():
             break
         else:
             img_number += 1
-    print(obutts_url)
     return obutts_url
