@@ -18,6 +18,7 @@ bot.
 """
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+import ComTime
 import logging
 
 # Enable logging
@@ -40,7 +41,7 @@ def help(bot, update):
 
 
 def time(bot, update):
-    bot.sendMessage(update.message.chat_id, text='Placeholder')
+    bot.sendMessage(update.message.chat_id, text=ComTime.return_time_msg())
 
 
 def error(bot, update, error):
