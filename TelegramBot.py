@@ -1,15 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# Simple Bot to reply to Telegram messages
-# This program is dedicated to the public domain under the CC0 license.
+# A telegram group bot based on echobot2:
+# https://github.com/python-telegram-bot/python-telegram-bot/blob/master/examples/echobot2.py
 
 """
 This Bot uses the Updater class to handle the bot.
-
-First, a few handler functions are defined. Then, those functions are passed to
-the Dispatcher and registered at their respective places.
-Then, the bot is started and runs until we press Ctrl-C on the command line.
 
 Usage:
 Basic Echobot example, repeats messages.
@@ -18,8 +14,8 @@ bot.
 """
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-import ComTime
-import logging
+import ComTime, ComTdT
+import logging, os
 
 # Enable logging
 logging.basicConfig(
@@ -28,6 +24,8 @@ logging.basicConfig(
         level=logging.INFO)
 
 logger = logging.getLogger(__name__)
+
+temp_img_dir = './Images/temp'
 
 
 # Define a few command handlers. These usually take the two arguments bot and
@@ -43,6 +41,9 @@ def help(bot, update):
 def time(bot, update):
     bot.sendMessage(update.message.chat_id, text=ComTime.return_time_msg())
 
+
+def tdt(bot, update):
+    bot.sendPhoto(update.message.chat_id, photo=ComTdT.get_tdt_img_url())
 
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
@@ -65,6 +66,7 @@ def main():
 
     # custom commands
     dp.add_handler(CommandHandler("time", time))
+    dp.add_handler(CommandHandler("tdt", tdt))
 
     # log all errors
     dp.add_error_handler(error)
