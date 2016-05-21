@@ -14,7 +14,7 @@ bot.
 """
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-import ComTime, ComTdT
+import ComTime, ComTdT, ComOPorn
 import logging, os
 
 # Enable logging
@@ -50,6 +50,10 @@ def fu(bot, update):
     bot.sendPhoto(update.message.chat_id, photo=open('./Images/media/Fuck_you.jpg', 'rb'))
 
 
+def boobs(bot, update):
+    bot.sendPhoto(update.message.chat_id, photo=ComOPorn.return_oboobs_url())
+
+
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
@@ -73,6 +77,7 @@ def main():
     dp.add_handler(CommandHandler("time", time))
     dp.add_handler(CommandHandler("tdt", tdt))
     dp.add_handler(CommandHandler("fu", fu))
+    dp.add_handler(CommandHandler("boobs", boobs))
 
     # log all errors
     dp.add_error_handler(error)
