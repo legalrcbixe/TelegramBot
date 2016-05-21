@@ -28,9 +28,3 @@ def return_time_msg():
     for tz in timezones:
         time_message += "{} | {}\n".format(return_time_str(tz), tz.replace("_", " "))
     return time_message
-
-def main():
-    print(return_time_msg())
-
-if __name__ == "__main__":
-    main()
