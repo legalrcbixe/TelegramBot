@@ -16,7 +16,8 @@ bot.
 commands_clean = {'help' : 'Gibt eine Liste der Befehle aus',
                 'time' : 'Gibt die aktuelle Zeit in Berlin, Tokio, Los Angeles und Shanghai aus',
                 'fu' : 'Postet das "Fuck You" Bild',
-                'remind' : 'Gibt einen Erinnerungstext nach einer definierten Zeit aus. Nutzung:\n/remind H M Erinnerungstext...'}
+                'remind' : 'Gibt einen Erinnerungstext nach einer definierten Zeit aus. Nutzung:\n/remind H M Erinnerungstext...',
+                'code' : 'Postet den Link zur GitHub Repository des C.A.B.A.L. Bots'}
 
 commands_dirty = {'tdt' : 'Posted das aktuelle Titten des Tages Bild',
                     'boobs' : 'Postet ein zufälliges Bild von oboobs.ru',
@@ -104,6 +105,10 @@ def remind(bot, update, args):
     bot.sendMessage(update.message.chat_id, text="Erinnerung in {}h {}m".format(args[0], args[1]))
 
 
+def code(bot, update):
+    bot.sendMessage(update.message.chat_id, text="https://github.com/Gronner/TelegramBot")
+
+
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
@@ -132,6 +137,7 @@ def main():
     dp.add_handler(CommandHandler("boobs", boobs))
     dp.add_handler(CommandHandler("butts", butts))
     dp.add_handler(CommandHandler("remind", remind, pass_args=True))
+    dp.add_handler(CommandHandler("code", code))
 
     # log all errors
     dp.add_error_handler(error)
