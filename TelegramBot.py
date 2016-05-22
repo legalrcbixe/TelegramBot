@@ -18,14 +18,15 @@ commands_clean = {'help' : 'Gibt eine Liste der Befehle aus',
                 'fu' : 'Postet das "Fuck You" Bild',
                 'remind' : 'Gibt einen Erinnerungstext nach einer definierten Zeit aus. Nutzung:\n/remind H M Erinnerungstext...',
                 'code' : 'Postet den Link zur GitHub Repository des C.A.B.A.L. Bots',
-                'wish' : 'Posted den Bearbeiterlink zum GDoc der Wunschfunkionen des Bots. Bitte nur die Felder Funktion, Name und Priorität ausfüllen.'}
+                'wish' : 'Postet den Bearbeiterlink zum GDoc der Wunschfunkionen des Bots. Bitte nur die Felder Funktion, Name und Priorität ausfüllen.',
+                'xkcd' : 'Postet einen zufälligen xkcd Comic'}
 
 commands_dirty = {'tdt' : 'Posted das aktuelle Titten des Tages Bild',
                     'boobs' : 'Postet ein zufälliges Bild von oboobs.ru',
                     'butts' : 'Postet ein zufälliges Bild von obutts.ru'}
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-import ComTime, ComTdT, ComOPorn
+import ComTime, ComTdT, ComOPorn, Comxkcd
 import logging, os
 
 
@@ -114,6 +115,10 @@ def wish(bot, update):
     bot.sendMessage(update.message.chat_id, text="https://docs.google.com/spreadsheets/d/1DOgpUypLGMSrgVRmye5Q_EPZdIS07-Sd-GuqzX8e-5c/edit?usp=sharing")
 
 
+def xkcd(bot, update):
+    bot.sendPhoto(update.message.chat_id, photo=Comxkcd.get_xkcd_link())
+
+
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
@@ -144,6 +149,7 @@ def main():
     dp.add_handler(CommandHandler("remind", remind, pass_args=True))
     dp.add_handler(CommandHandler("code", code))
     dp.add_handler(CommandHandler("wish", wish))
+    dp.add_handler(CommandHandler("xkcd", xkcd))
 
     # log all errors
     dp.add_error_handler(error)
