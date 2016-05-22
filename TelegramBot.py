@@ -127,7 +127,7 @@ def main():
     global jobs
     # Get bot token from token.conf
     with open("token.conf") as token_file:
-        bot_token = str(token_file.readline())
+        bot_token = str(token_file.readline()).strip('\n')
 
     # Create the EventHandler and pass it your bot's token.
     updater = Updater(token=bot_token)
