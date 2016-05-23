@@ -20,19 +20,21 @@ import Comxkcd
 import ComUtils
 import logging
 
-commands_clean = {'help' : 'Gibt eine Liste der Befehle aus',
-                'time' : 'Gibt die aktuelle Zeit in Berlin, Tokio, Los Angeles und Shanghai aus',
-                'fu' : 'Postet das "Fuck You" Bild',
-                'remind' : 'Gibt einen Erinnerungstext nach einer definierten Zeit aus. Nutzung:\n/remind H M Erinnerungstext...',
-                'code' : 'Postet den Link zur GitHub Repository des C.A.B.A.L. Bots',
-                'wish' : 'Postet den Bearbeiterlink zum GDoc der Wunschfunkionen des Bots. Bitte nur die Felder Funktion, Name und Priorität ausfüllen.',
-                'xkcd' : 'Postet einen zufälligen xkcd Comic',
-                'chatid' : 'Gibt die ChatId des aktuellen Chats aus'}
+commands_clean = {'help': 'Gibt eine Liste der Befehle aus',
+                    'time': 'Gibt die aktuelle Zeit in Berlin, Tokio, Los Angeles und Shanghai aus',
+                    'fu': 'Postet das "Fuck You" Bild',
+                    'remind': 'Gibt einen Erinnerungstext nach einer definierten Zeit aus. Nutzung:\n/remind H M Erinnerungstext...',
+                    'code': 'Postet den Link zur GitHub Repository des C.A.B.A.L. Bots',
+                    'wish': 'Postet den Bearbeiterlink zum GDoc der Wunschfunkionen des Bots. Bitte nur die Felder Funktion, Name und Priorität ausfüllen.',
+                    'xkcd': 'Postet einen zufälligen xkcd Comic',
+                    'chatid': 'Gibt die ChatId des aktuellen Chats aus'}
 
 commands_dirty = {'tdt' : 'Posted das aktuelle Titten des Tages Bild',
-                    'boobs' : 'Postet ein zufälliges Bild von oboobs.ru',
-                    'butts' : 'Postet ein zufälliges Bild von obutts.ru',
-                    'safemode': 'Schaltet/Deaktiviert den Bot für die Nutzung der NSFW Kommandos frei'}
+                    'boobs': 'Postet ein zufälliges Bild von oboobs.ru',
+                    'butts': 'Postet ein zufälliges Bild von obutts.ru',
+                    'safemode': 'Schaltet/Deaktiviert den Bot für die Nutzung der NSFW Kommandos frei',
+                    'bb': 'Sendet ein Boob und ein Butt Bild von oboobs.ru und obutts.ru',
+                    'faptime': 'Sendet je 6 Boob und Butt Bilder von oboobs.ru und obutts.ru'}
 
 img_media_dir = './Images/media/'
 img_temp_dir = './Images/temp/'
