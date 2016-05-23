@@ -12,6 +12,12 @@ Basic Echobot example, repeats messages.
 Press Ctrl-C on the command line or send a signal to the process to stop the
 bot.
 """
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+import ComTime
+import ComTdT
+import ComOPorn
+import Comxkcd
+import logging
 
 commands_clean = {'help' : 'Gibt eine Liste der Befehle aus',
                 'time' : 'Gibt die aktuelle Zeit in Berlin, Tokio, Los Angeles und Shanghai aus',
@@ -25,21 +31,19 @@ commands_dirty = {'tdt' : 'Posted das aktuelle Titten des Tages Bild',
                     'boobs' : 'Postet ein zufälliges Bild von oboobs.ru',
                     'butts' : 'Postet ein zufälliges Bild von obutts.ru'}
 
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-import ComTime, ComTdT, ComOPorn, Comxkcd
-import logging, os
-
+img_media_dir = './Images/media/'
+img_temp_dir = './Images/temp/'
+res_dir = './res/'
 
 
 # Enable logging
 logging.basicConfig(
-        filename='tgbot.log',
+        filename=res_dir+'tgbot.log',
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         level=logging.INFO)
 
 logger = logging.getLogger(__name__)
 
-temp_img_dir = './Images/temp'
 jobs = None
 
 
@@ -119,6 +123,10 @@ def xkcd(bot, update):
     bot.sendPhoto(update.message.chat_id, photo=Comxkcd.get_xkcd_link())
 
 
+def chatid(bot, update):
+    bot.sendMessage(update.message.chat_id, text=update.message.chat_id)
+
+
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
@@ -126,7 +134,7 @@ def error(bot, update, error):
 def main():
     global jobs
     # Get bot token from token.conf
-    with open("token.conf") as token_file:
+    with open(res_dir+'token.conf') as token_file:
         bot_token = str(token_file.readline()).strip('\n')
 
     # Create the EventHandler and pass it your bot's token.
@@ -150,6 +158,7 @@ def main():
     dp.add_handler(CommandHandler("code", code))
     dp.add_handler(CommandHandler("wish", wish))
     dp.add_handler(CommandHandler("xkcd", xkcd))
+    dp.add_handler(CommandHandler("chatid", chatid))
 
     # log all errors
     dp.add_error_handler(error)
