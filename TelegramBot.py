@@ -27,12 +27,12 @@ commands_clean = {'help' : 'Gibt eine Liste der Befehle aus',
                 'code' : 'Postet den Link zur GitHub Repository des C.A.B.A.L. Bots',
                 'wish' : 'Postet den Bearbeiterlink zum GDoc der Wunschfunkionen des Bots. Bitte nur die Felder Funktion, Name und Priorität ausfüllen.',
                 'xkcd' : 'Postet einen zufälligen xkcd Comic',
-                'chatid' : 'Gibt die ChatId des aktuellen Chats aus',
-                'safemode' : 'Schaltet/Deaktiviert den Bot für die Nutzung der NSFW Kommandos frei'}
+                'chatid' : 'Gibt die ChatId des aktuellen Chats aus'}
 
 commands_dirty = {'tdt' : 'Posted das aktuelle Titten des Tages Bild',
                     'boobs' : 'Postet ein zufälliges Bild von oboobs.ru',
-                    'butts' : 'Postet ein zufälliges Bild von obutts.ru'}
+                    'butts' : 'Postet ein zufälliges Bild von obutts.ru',
+                    'safemode': 'Schaltet/Deaktiviert den Bot für die Nutzung der NSFW Kommandos frei'}
 
 img_media_dir = './Images/media/'
 img_temp_dir = './Images/temp/'
