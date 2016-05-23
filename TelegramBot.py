@@ -17,6 +17,7 @@ import ComTime
 import ComTdT
 import ComOPorn
 import Comxkcd
+import ComUtils
 import logging
 
 commands_clean = {'help' : 'Gibt eine Liste der Befehle aus',
@@ -26,7 +27,8 @@ commands_clean = {'help' : 'Gibt eine Liste der Befehle aus',
                 'code' : 'Postet den Link zur GitHub Repository des C.A.B.A.L. Bots',
                 'wish' : 'Postet den Bearbeiterlink zum GDoc der Wunschfunkionen des Bots. Bitte nur die Felder Funktion, Name und Priorität ausfüllen.',
                 'xkcd' : 'Postet einen zufälligen xkcd Comic',
-                'chatid' : 'Gibt die ChatId des aktuellen Chats aus'}
+                'chatid' : 'Gibt die ChatId des aktuellen Chats aus',
+                'safemode' : 'Schaltet/Deaktiviert den Bot für die Nutzung der NSFW Kommandos frei'}
 
 commands_dirty = {'tdt' : 'Posted das aktuelle Titten des Tages Bild',
                     'boobs' : 'Postet ein zufälliges Bild von oboobs.ru',
@@ -37,6 +39,8 @@ img_temp_dir = './Images/temp/'
 res_dir = './res/'
 bot_token = ""
 dev_chat = 0
+whitelist = []
+safemode_list = []
 
 
 # Enable logging
@@ -53,77 +57,88 @@ jobs = None
 # Define a few command handlers. These usually take the two arguments bot and
 # update. Error handlers also receive the raised TelegramError object in error.
 def start(bot, update):
-    bot.sendMessage(update.message.chat_id, text='Hi!')
+    if update.message.chat_id in whitelist:
+        bot.sendMessage(update.message.chat_id, text='Hi!')
 
 
 def help(bot, update, args):
-    if len(args) > 1 or len(args) < 0:
-        bot.sendMessage(update.message.chat_id, text="Bitte nur ein Argument angeben")
-    if args:
-        if {**commands_clean, **commands_dirty}.get(args[0]) is not None:
-            bot.sendMessage(update.message.chat_id, text={**commands_clean, **commands_dirty}[args[0]])
+    if update.message.chat_id in whitelist:
+        if len(args) > 1 or len(args) < 0:
+            bot.sendMessage(update.message.chat_id, text="Bitte nur ein Argument angeben")
+        if args:
+            if {**commands_clean, **commands_dirty}.get(args[0]) is not None:
+                bot.sendMessage(update.message.chat_id, text={**commands_clean, **commands_dirty}[args[0]])
+            else:
+                bot.sendMessage(update.message.chat_id, text="Keine C.A.B.A.L. Funktion")
         else:
-            bot.sendMessage(update.message.chat_id, text="Keine C.A.B.A.L. Funktion")
-    else:
-        command_list = ""
-        if update.message.chat_id == -5707720:
-            for key in commands_dirty:
+            command_list = ""
+            if update.message.chat_id in safemode_list:
+                for key in commands_dirty:
+                    command_list += key + '\n'
+            for key in commands_clean:
                 command_list += key + '\n'
-        for key in commands_clean:
-            command_list += key + '\n'
-        bot.sendMessage(update.message.chat_id, text=command_list)
+            bot.sendMessage(update.message.chat_id, text=command_list)
 
 
 def time(bot, update):
-    bot.sendMessage(update.message.chat_id, text=ComTime.return_time_msg())
+    if update.message.chat_id in whitelist:
+        bot.sendMessage(update.message.chat_id, text=ComTime.return_time_msg())
 
 
 def tdt(bot, update):
-    bot.sendPhoto(update.message.chat_id, photo=ComTdT.get_tdt_img_url())
+    if update.message.chat_id in whitelist and update.message.chat_id in safemode_list:
+        bot.sendPhoto(update.message.chat_id, photo=ComTdT.get_tdt_img_url())
 
 
 def fu(bot, update):
-    bot.sendPhoto(update.message.chat_id, photo=open('./Images/media/Fuck_you.jpg', 'rb'))
+    if update.message.chat_id in whitelist:
+        bot.sendPhoto(update.message.chat_id, photo=open('./Images/media/Fuck_you.jpg', 'rb'))
 
 
 def boobs(bot, update):
-    bot.sendPhoto(update.message.chat_id, photo=ComOPorn.return_oboobs_url())
+    if update.message.chat_id in whitelist and update.message.chat_id in safemode_list:
+        bot.sendPhoto(update.message.chat_id, photo=ComOPorn.return_oboobs_url())
 
 
 def butts(bot, update):
-    bot.sendPhoto(update.message.chat_id, photo=ComOPorn.return_obutts_url())
+    if update.message.chat_id in whitelist and update.message.chat_id in safemode_list:
+        bot.sendPhoto(update.message.chat_id, photo=ComOPorn.return_obutts_url())
 
 
 def remind(bot, update, args):
-    if len(args) < 2:
-        bot.sendMessage(update.message.chat_id, text="Bitte zwei Argumente nutzen: Stunden Minuten Erinnerung...")
-    try:
-        int(args[0])
-        int(args[1])
-    except ValueError:
-        bot.sendMessage(update.message.chat_id, text="Als erstes bitte die Zeit in Stunden, dann die Zeit in Minuten \
-                                                     angeben: H M Nachricht...")
-    delay = int(args[0]) * 3600 + int(args[1]) * 60
-    remind_message = ' '.join(args[2:])
+    if update.message.chat_id in whitelist:
+        if len(args) < 2:
+            bot.sendMessage(update.message.chat_id, text="Bitte zwei Argumente nutzen: Stunden Minuten Erinnerung...")
+        try:
+            int(args[0])
+            int(args[1])
+        except ValueError:
+            bot.sendMessage(update.message.chat_id, text="Als erstes bitte die Zeit in Stunden, dann die Zeit in Minuten \
+                                                         angeben: H M Nachricht...")
+        delay = int(args[0]) * 3600 + int(args[1]) * 60
+        remind_message = ' '.join(args[2:])
 
-    # inner alarm function
-    def reminder(bot):
-        bot.sendMessage(update.message.chat_id, text=remind_message)
+        # inner alarm function
+        def reminder(bot):
+            bot.sendMessage(update.message.chat_id, text=remind_message)
 
-    jobs.put(reminder, delay, repeat=False)
-    bot.sendMessage(update.message.chat_id, text="Erinnerung in {}h {}m".format(args[0], args[1]))
+        jobs.put(reminder, delay, repeat=False)
+        bot.sendMessage(update.message.chat_id, text="Erinnerung in {}h {}m".format(args[0], args[1]))
 
 
 def code(bot, update):
-    bot.sendMessage(update.message.chat_id, text="https://github.com/Gronner/TelegramBot")
+    if update.message.chat_id in whitelist:
+        bot.sendMessage(update.message.chat_id, text="https://github.com/Gronner/TelegramBot")
 
 
 def wish(bot, update):
-    bot.sendMessage(update.message.chat_id, text="https://docs.google.com/spreadsheets/d/1DOgpUypLGMSrgVRmye5Q_EPZdIS07-Sd-GuqzX8e-5c/edit?usp=sharing")
+    if update.message.chat_id in whitelist:
+        bot.sendMessage(update.message.chat_id, text="https://docs.google.com/spreadsheets/d/1DOgpUypLGMSrgVRmye5Q_EPZdIS07-Sd-GuqzX8e-5c/edit?usp=sharing")
 
 
 def xkcd(bot, update):
-    bot.sendPhoto(update.message.chat_id, photo=Comxkcd.get_xkcd_link())
+    if update.message.chat_id in whitelist:
+        bot.sendPhoto(update.message.chat_id, photo=Comxkcd.get_xkcd_link())
 
 
 def chatid(bot, update):
@@ -145,6 +160,18 @@ def maintenance(bot, update, args):
                     bot.sendMessage(chat_id=int(str(line).strip('\n')), text="Der Bot ist wegen Wartungsarbeiten für {} Stunde nicht erreichbar sein!".format(int(args[0])))
 
 
+def safemode(bot, update):
+    global safemode_list
+    if update.message.chat_id in whitelist:
+        if update.message.chat_id in safemode_list:
+            safemode_list.remove(update.message.chat_id)
+            ComUtils.remove_from_safemode(safemode_list)
+            safemode_list = ComUtils.get_safemode_list()
+        else:
+            ComUtils.add_to_safemode(update.message.chat_id)
+            safemode_list = ComUtils.get_safemode_list()
+
+
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
@@ -153,6 +180,8 @@ def main():
     global jobs
     global bot_token
     global dev_chat
+    global whitelist
+    global safemode_list
     # Get bot token and devchat from token.conf
     with open(res_dir + 'token.conf') as token_file:
         for i, line in enumerate(token_file):
@@ -161,6 +190,9 @@ def main():
             if i == 1:
                 dev_chat = int(str(line).strip('\n'))
                 break
+
+    whitelist = ComUtils.get_whitelist()
+    safemode_list = ComUtils.get_safemode_list()
 
     # Create the EventHandler and pass it your bot's token.
     updater = Updater(token=bot_token)
@@ -185,6 +217,7 @@ def main():
     dp.add_handler(CommandHandler("xkcd", xkcd))
     dp.add_handler(CommandHandler("chatid", chatid))
     dp.add_handler(CommandHandler("maintenance", maintenance, pass_args=True))
+    dp.add_handler(CommandHandler("safemode", safemode))
 
     # log all errors
     dp.add_error_handler(error)
