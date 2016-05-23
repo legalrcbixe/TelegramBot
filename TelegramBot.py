@@ -172,6 +172,19 @@ def safemode(bot, update):
             safemode_list = ComUtils.get_safemode_list()
 
 
+def bb(bot, update):
+    if update.message.chat_id in whitelist and update.message.chat_id in safemode_list:
+        bot.sendPhoto(update.message.chat_id, photo=ComOPorn.return_oboobs_url())
+        bot.sendPhoto(update.message.chat_id, photo=ComOPorn.return_obutts_url())
+
+
+def faptime(bot, update):
+    if update.message.chat_id in whitelist and update.message.chat_id in safemode_list:
+        for i in range(0,6):
+            bot.sendPhoto(update.message.chat_id, photo=ComOPorn.return_oboobs_url())
+            bot.sendPhoto(update.message.chat_id, photo=ComOPorn.return_obutts_url())
+
+
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
@@ -218,6 +231,8 @@ def main():
     dp.add_handler(CommandHandler("chatid", chatid))
     dp.add_handler(CommandHandler("maintenance", maintenance, pass_args=True))
     dp.add_handler(CommandHandler("safemode", safemode))
+    dp.add_handler(CommandHandler("bb", bb))
+    dp.add_handler(CommandHandler("faptime", faptime))
 
     # log all errors
     dp.add_error_handler(error)
