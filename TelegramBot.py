@@ -157,7 +157,7 @@ def maintenance(bot, update, args):
                 return
             with open(res_dir+'whitelist.conf') as whitelist:
                 for i, line in enumerate(whitelist):
-                    bot.sendMessage(chat_id=int(str(line).strip('\n')), text="Der Bot ist wegen Wartungsarbeiten für {} Stunde nicht erreichbar sein!".format(int(args[0])))
+                    bot.sendMessage(chat_id=int(str(line).strip('\n')), text="Der Bot ist wegen Wartungsarbeiten für {} Stunde(n) nicht erreichbar!".format(int(args[0])))
 
 
 def safemode(bot, update):
