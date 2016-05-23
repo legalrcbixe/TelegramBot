@@ -25,7 +25,8 @@ commands_clean = {'help' : 'Gibt eine Liste der Befehle aus',
                 'remind' : 'Gibt einen Erinnerungstext nach einer definierten Zeit aus. Nutzung:\n/remind H M Erinnerungstext...',
                 'code' : 'Postet den Link zur GitHub Repository des C.A.B.A.L. Bots',
                 'wish' : 'Postet den Bearbeiterlink zum GDoc der Wunschfunkionen des Bots. Bitte nur die Felder Funktion, Name und Priorität ausfüllen.',
-                'xkcd' : 'Postet einen zufälligen xkcd Comic'}
+                'xkcd' : 'Postet einen zufälligen xkcd Comic',
+                'chatid' : 'Gibt die ChatId des aktuellen Chats aus'}
 
 commands_dirty = {'tdt' : 'Posted das aktuelle Titten des Tages Bild',
                     'boobs' : 'Postet ein zufälliges Bild von oboobs.ru',
@@ -34,6 +35,8 @@ commands_dirty = {'tdt' : 'Posted das aktuelle Titten des Tages Bild',
 img_media_dir = './Images/media/'
 img_temp_dir = './Images/temp/'
 res_dir = './res/'
+bot_token = ""
+dev_chat = 0
 
 
 # Enable logging
@@ -127,15 +130,37 @@ def chatid(bot, update):
     bot.sendMessage(update.message.chat_id, text=update.message.chat_id)
 
 
+def maintenance(bot, update, args):
+    if update.message.chat_id == dev_chat:
+        if len(args) != 1:
+            bot.sendMessage(chat_id=dev_chat, text="Bitte nur die Downtime in Stunden angeben.")
+        else:
+            try:
+                int(args[0])
+            except ValueError:
+                bot.sendMessage(chat_id=dev_chat, text="Die Downtime in Stunden bitte als Ganzzahl angeben.")
+                return
+            with open(res_dir+'whitelist.conf') as whitelist:
+                for i, line in enumerate(whitelist):
+                    bot.sendMessage(chat_id=int(str(line).strip('\n')), text="Der Bot ist wegen Wartungsarbeiten für {} Stunde nicht erreichbar sein!".format(int(args[0])))
+
+
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
 
 def main():
     global jobs
-    # Get bot token from token.conf
-    with open(res_dir+'token.conf') as token_file:
-        bot_token = str(token_file.readline()).strip('\n')
+    global bot_token
+    global dev_chat
+    # Get bot token and devchat from token.conf
+    with open(res_dir + 'token.conf') as token_file:
+        for i, line in enumerate(token_file):
+            if i == 0:
+                bot_token = str(line).strip('\n')
+            if i == 1:
+                dev_chat = int(str(line).strip('\n'))
+                break
 
     # Create the EventHandler and pass it your bot's token.
     updater = Updater(token=bot_token)
@@ -159,6 +184,7 @@ def main():
     dp.add_handler(CommandHandler("wish", wish))
     dp.add_handler(CommandHandler("xkcd", xkcd))
     dp.add_handler(CommandHandler("chatid", chatid))
+    dp.add_handler(CommandHandler("maintenance", maintenance, pass_args=True))
 
     # log all errors
     dp.add_error_handler(error)
