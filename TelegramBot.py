@@ -27,7 +27,8 @@ commands_clean = {'help': 'Gibt eine Liste der Befehle aus',
                     'code': 'Postet den Link zur GitHub Repository des C.A.B.A.L. Bots',
                     'wish': 'Postet den Bearbeiterlink zum GDoc der Wunschfunkionen des Bots. Bitte nur die Felder Funktion, Name und Priorität ausfüllen.',
                     'xkcd': 'Postet einen zufälligen xkcd Comic',
-                    'chatid': 'Gibt die ChatId des aktuellen Chats aus'}
+                    'chatid': 'Gibt die ChatId des aktuellen Chats aus',
+                    'watn': 'Postet das "Was ist den los mit dir" Bild'}
 
 commands_dirty = {'tdt' : 'Posted das aktuelle Titten des Tages Bild',
                     'boobs': 'Postet ein zufälliges Bild von oboobs.ru',
@@ -94,7 +95,7 @@ def tdt(bot, update):
 
 def fu(bot, update):
     if update.message.chat_id in whitelist:
-        bot.sendPhoto(update.message.chat_id, photo=open('./Images/media/Fuck_you.jpg', 'rb'))
+        bot.sendPhoto(update.message.chat_id, photo=open(img_media_dir+'Fuck_you.jpg', 'rb'))
 
 
 def boobs(bot, update):
@@ -187,6 +188,11 @@ def faptime(bot, update):
             bot.sendPhoto(update.message.chat_id, photo=ComOPorn.return_obutts_url())
 
 
+def watn(bot, update):
+    if update.message.chat_id in whitelist:
+        bot.sendPhoto(update.message.chat_id, photo=open(img_media_dir+'watn.png', 'rb'))
+
+
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
@@ -235,6 +241,7 @@ def main():
     dp.add_handler(CommandHandler("safemode", safemode))
     dp.add_handler(CommandHandler("bb", bb))
     dp.add_handler(CommandHandler("faptime", faptime))
+    dp.add_handler(CommandHandler("watn", watn))
 
     # log all errors
     dp.add_error_handler(error)
