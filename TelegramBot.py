@@ -193,6 +193,11 @@ def watn(bot, update):
         bot.sendPhoto(update.message.chat_id, photo=open(img_media_dir+'watn.png', 'rb'))
 
 
+def bier(bot, update):
+    if update.message.chat_id in whitelist:
+        bot.sendMessage(update.message.chat_id, text="https://media.giphy.com/media/92wsX8GEoNTYA/giphy.gif")
+
+
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
@@ -242,6 +247,7 @@ def main():
     dp.add_handler(CommandHandler("bb", bb))
     dp.add_handler(CommandHandler("faptime", faptime))
     dp.add_handler(CommandHandler("watn", watn))
+    dp.add_handler(CommandHandler("bier", bier))
 
     # log all errors
     dp.add_error_handler(error)
