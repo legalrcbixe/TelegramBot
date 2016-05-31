@@ -18,6 +18,7 @@ import ComTdT
 import ComOPorn
 import Comxkcd
 import ComUtils
+import ComKicktipp
 import logging
 
 commands_clean = {'help': 'Gibt eine Liste der Befehle aus',
@@ -30,7 +31,7 @@ commands_clean = {'help': 'Gibt eine Liste der Befehle aus',
                     'chatid': 'Gibt die ChatId des aktuellen Chats aus',
                     'watn': 'Postet das "Was ist den los mit dir" Bild',
                     'bier': 'Postet ein Gif von Bier',
-                    'kicktipp': 'Postet den Link zur "Heute Abend EM Kicktipptruppe'}
+                    'kicktipp': 'Postet den Link zur "Heute Abend EM Kicktipptruppe und gibt den aktuellen Punktestand aus'}
 
 commands_dirty = {'tdt' : 'Posted das aktuelle Titten des Tages Bild',
                     'boobs': 'Postet ein zufälliges Bild von oboobs.ru',
@@ -202,7 +203,7 @@ def bier(bot, update):
 
 def kicktipp(bot, update):
     if update.message.chat_id in whitelist:
-        bot.sendMessage(update.message.chat_id, text="https://www.kicktipp.de/emheuteabend/")
+        bot.sendMessage(update.message.chat_id, text=ComKicktipp.get_kicktipp_msg())
 
 
 def error(bot, update, error):
