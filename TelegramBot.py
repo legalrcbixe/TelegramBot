@@ -28,7 +28,9 @@ commands_clean = {'help': 'Gibt eine Liste der Befehle aus',
                     'wish': 'Postet den Bearbeiterlink zum GDoc der Wunschfunkionen des Bots. Bitte nur die Felder Funktion, Name und Priorität ausfüllen.',
                     'xkcd': 'Postet einen zufälligen xkcd Comic',
                     'chatid': 'Gibt die ChatId des aktuellen Chats aus',
-                    'watn': 'Postet das "Was ist den los mit dir" Bild'}
+                    'watn': 'Postet das "Was ist den los mit dir" Bild',
+                    'bier': 'Postet ein Gif von Bier',
+                    'kicktipp': 'Postet den Link zur "Heute Abend EM Kicktipptruppe'}
 
 commands_dirty = {'tdt' : 'Posted das aktuelle Titten des Tages Bild',
                     'boobs': 'Postet ein zufälliges Bild von oboobs.ru',
@@ -198,6 +200,11 @@ def bier(bot, update):
         bot.sendMessage(update.message.chat_id, text="https://media.giphy.com/media/92wsX8GEoNTYA/giphy.gif")
 
 
+def kicktipp(bot, update):
+    if update.message.chat_id in whitelist:
+        bot.sendMessage(update.message.chat_id, text="https://www.kicktipp.de/emheuteabend/")
+
+
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
@@ -248,6 +255,7 @@ def main():
     dp.add_handler(CommandHandler("faptime", faptime))
     dp.add_handler(CommandHandler("watn", watn))
     dp.add_handler(CommandHandler("bier", bier))
+    dp.add_handler(CommandHandler("kicktipp", kicktipp))
 
     # log all errors
     dp.add_error_handler(error)
