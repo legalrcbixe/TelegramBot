@@ -26,10 +26,19 @@ def get_safemode_list():
 
 def add_to_safemode(chat_id):
     with open(safemode_file, 'a') as sf_file:
-        sf_file.write(str(chat_id))
+        sf_file.write("{}\n".format(chat_id)))
 
 
 def remove_from_safemode(new_safemode_list):
     with open(safemode_file, 'w') as sf_file:
         for chat_id in new_safemode_list:
             sf_file.write("{}\n".format(chat_id))
+
+
+def add_to_whitelist(chat_id):
+    current_whitelist = get_whitelist()
+    current_whitelist.append(str(chat_id).strip('\n'))
+    with open(whitelist_file, 'w') as wf_file:
+        for chat_ids in current_whitelist:
+            wf_file.write("{}\n".format(chat_ids))
+    return current_whitelist

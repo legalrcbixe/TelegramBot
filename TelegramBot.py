@@ -206,6 +206,13 @@ def kicktipp(bot, update):
         bot.sendMessage(update.message.chat_id, text=ComKicktipp.get_kicktipp_msg())
 
 
+def add(bot, update):
+    global dev_chat
+    global whitelist
+    if update.message.chat_id == dev_chat:
+        whitelist = ComUtils.add_to_whitelist(update.message.chat_id)
+
+
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
