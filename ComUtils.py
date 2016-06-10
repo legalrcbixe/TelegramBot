@@ -26,7 +26,7 @@ def get_safemode_list():
 
 def add_to_safemode(chat_id):
     with open(safemode_file, 'a') as sf_file:
-        sf_file.write("{}\n".format(chat_id)))
+        sf_file.write("{}\n".format(chat_id))
 
 
 def remove_from_safemode(new_safemode_list):
