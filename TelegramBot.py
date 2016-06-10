@@ -182,7 +182,6 @@ def safemode(bot, update):
 def bb(bot, update):
     if update.message.chat_id in whitelist and update.message.chat_id in safemode_list:
         bot.sendPhoto(update.message.chat_id, photo=ComOPorn.return_oboobs_url())
-        time.sleep(0.2)
         bot.sendPhoto(update.message.chat_id, photo=ComOPorn.return_obutts_url())
 
 
