@@ -206,11 +206,14 @@ def kicktipp(bot, update):
         bot.sendMessage(update.message.chat_id, text=ComKicktipp.get_kicktipp_msg())
 
 
-def add(bot, update):
+def add(bot, update, args):
     global dev_chat
     global whitelist
+    if len (args) != 1:
+        bot.sendMessage(update.message.chat_id, text="Bitte nur die Chat ID als Argument angeben.")
     if update.message.chat_id == dev_chat:
-        whitelist = ComUtils.add_to_whitelist(update.message.chat_id)
+        whitelist = ComUtils.add_to_whitelist(args[0])
+        bot.sendMessage(update.message.chat_id, text="{} wurde zur whitelist hinzugefügt".format(args[0]))
 
 
 def error(bot, update, error):
@@ -264,6 +267,7 @@ def main():
     dp.add_handler(CommandHandler("watn", watn))
     dp.add_handler(CommandHandler("bier", bier))
     dp.add_handler(CommandHandler("kicktipp", kicktipp))
+    dp.add_handler(CommandHandler("add", add, pass_args=True))
 
     # log all errors
     dp.add_error_handler(error)
