@@ -20,7 +20,6 @@ import Comxkcd
 import ComUtils
 import ComKicktipp
 import logging
-import time
 
 commands_clean = {'help': 'Gibt eine Liste der Befehle aus',
                     'time': 'Gibt die aktuelle Zeit in Berlin, Tokio, Los Angeles und Shanghai aus',
@@ -153,6 +152,7 @@ def chatid(bot, update):
 
 
 def maintenance(bot, update, args):
+    global whitelist
     if update.message.chat_id == dev_chat:
         if len(args) != 1:
             bot.sendMessage(chat_id=dev_chat, text="Bitte nur die Downtime in Stunden angeben.")
