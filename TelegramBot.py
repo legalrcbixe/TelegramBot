@@ -93,7 +93,7 @@ def time(bot, update):
 
 def tdt(bot, update):
     if update.message.chat_id in whitelist and update.message.chat_id in safemode_list:
-        bot.sendPhoto(update.message.chat_id, photo=ComTdT.get_tdt_img_url())
+        bot.sendMessage(update.message.chat_id, text=ComTdT.get_tdt_img_url())
 
 
 def fu(bot, update):
