@@ -156,12 +156,17 @@ def maintenance(bot, update, args):
     global whitelist
     if update.message.chat_id == dev_chat:
         if len(args) == 1 and Utilities.is_con_to_int(args[0]):
-            bot.sendMessage(chat_id=int(str(line).strip('\n')),
-                            text="Der Bot ist wegen Wartungsarbeiten für {} Stunde(n) nicht erreichbar!".format(
-                                int(args[0])))
-        elif len(args) <= 1:
+            with open(res_dir + 'whitelist.conf') as whitelist:
+                for i, line in enumerate(whitelist):
+                    bot.sendMessage(chat_id=int(str(line).strip('\n')), text="Der Bot ist wegen Wartungsarbeiten für {} Stunde(n) nicht erreichbar!".format(int(args[0])))
+
+        elif len(args) >= 1:
             maint_message = " ".join(args)
-            bot.sendMessage(chat_id=int(str(line).strip('\n')), text=maint_message)
+            with open(res_dir + 'whitelist.conf') as whitelist:
+                for i, line in enumerate(whitelist):
+                    bot.sendMessage(chat_id=int(str(line).strip('\n')), text=maint_message)
+        else:
+            bot.sendMessage(chat_id=dev_chat, text="Something went wrong")
 
 
 def safemode(bot, update):
